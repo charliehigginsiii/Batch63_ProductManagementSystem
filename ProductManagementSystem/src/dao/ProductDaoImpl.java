@@ -312,8 +312,9 @@ public class ProductDaoImpl implements ProductDao {
 			java.util.Date date = new java.util.Date();
 			Date currentdate=new Date(date.getTime());
 			String currentdatetext=dateformatter.format(currentdate);
+			java.util.Date date1 = new java.util.Date(currentdatetext);
 			PreparedStatement prepared=con.prepareStatement("select * from products where expiry_date<=?");
-			prepared.setDate(1,(Date) date);
+			System.out.println(date1);
 			ResultSet results=prepared.executeQuery();
 			while(results.next()) {
 				list.add(new Product(results.getInt(1),results.getString(2),results.getString(3),results.getDate(4)
