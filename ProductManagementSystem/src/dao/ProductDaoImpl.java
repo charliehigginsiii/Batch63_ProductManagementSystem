@@ -43,8 +43,6 @@ public class ProductDaoImpl implements ProductDao {
 			prepared.setDouble(5, product.getPrice());
 			prepared.setDate(6, (Date) product.getExpiry_date());
 			prepared.execute();
-			System.out.println("1 row inserted.");
-			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -70,8 +68,6 @@ public class ProductDaoImpl implements ProductDao {
 			PreparedStatement prepared=con.prepareStatement("delete from products where pid=?");
 			prepared.setInt(1,new Scanner(System.in).nextInt());
 			prepared.execute();
-			System.out.println("1 row inserted.");
-			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -99,8 +95,6 @@ public class ProductDaoImpl implements ProductDao {
 			System.out.println("Enter Product Id");
 			prepared.setString(1,new Scanner(System.in).nextLine());
 			prepared.execute();
-			System.out.println("1 row inserted.");
-			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -134,7 +128,6 @@ public class ProductDaoImpl implements ProductDao {
 				fetchedproduct=new Product(results.getInt(1),results.getString(2),results.getString(3),results.getDate(4)
 				,results.getDouble(5),results.getDate(6));
 			}
-			System.out.println("1 row inserted.");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -167,7 +160,6 @@ public class ProductDaoImpl implements ProductDao {
 				list.add(new Product(results.getInt(1),results.getString(2),results.getString(3),results.getDate(4)
 						,results.getDouble(5),results.getDate(6)));
 			}
-			System.out.println("1 row inserted.");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -200,7 +192,6 @@ public class ProductDaoImpl implements ProductDao {
 				fetchedproduct=new Product(results.getInt(1),results.getString(2),results.getString(3),results.getDate(4)
 						,results.getDouble(5),results.getDate(6));
 			}
-			System.out.println("1 row inserted.");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -281,9 +272,6 @@ public class ProductDaoImpl implements ProductDao {
 				prepared.setInt(2,new Scanner(System.in).nextInt());
 				prepared.execute();
 			}
-			
-			
-			System.out.println("1 row inserted.");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -297,7 +285,6 @@ public class ProductDaoImpl implements ProductDao {
 		
 	}
 
-	@Override
 	public List<Product> findExpiredProducts() {
 		List<Product> list=new ArrayList();
 		try {
@@ -312,15 +299,13 @@ public class ProductDaoImpl implements ProductDao {
 			java.util.Date date = new java.util.Date();
 			Date currentdate=new Date(date.getTime());
 			String currentdatetext=dateformatter.format(currentdate);
-			java.util.Date date1 = new java.util.Date(currentdatetext);
-			PreparedStatement prepared=con.prepareStatement("select * from products where expiry_date<=?");
-			System.out.println(date1);
+			PreparedStatement prepared=con.prepareStatement("select * from products where expiry_date=?");
+			prepared.setDate(1, java.sql.Date.valueOf(currentdatetext));
 			ResultSet results=prepared.executeQuery();
 			while(results.next()) {
 				list.add(new Product(results.getInt(1),results.getString(2),results.getString(3),results.getDate(4)
 						,results.getDouble(5),results.getDate(6)));
 			}
-			System.out.println("1 row inserted.");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

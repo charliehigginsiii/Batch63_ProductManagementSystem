@@ -49,7 +49,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public List<Product> findExpiredProducts() {
-		return null;
+		return impl.findExpiredProducts();
 	}
 	
 
