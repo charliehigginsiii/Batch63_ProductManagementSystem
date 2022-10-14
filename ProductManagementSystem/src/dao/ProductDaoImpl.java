@@ -5,11 +5,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -20,28 +23,14 @@ import bean.Product;
 public class ProductDaoImpl implements ProductDao {
 	
 	Properties prop=new Properties();
-	/*ProductDaoImpl classobj=new ProductDaoImpl();
-	Class obj=classobj.getClass();
-	URL propertiesfilepath=obj.getResource("test.properties");*/
+	URL propertiesfilepath=ProductDaoImpl.class.getResource("test.properties");
 	
 	@Override
 	public void addProduct(Product product) {
 		try {
-			FileInputStream input=new FileInputStream("C:/Users/Chuck/git/Batch63_ProductManagementSystem/ProductManagementSystem/src/test.properties");
+			FileInputStream input=new FileInputStream(propertiesfilepath.getFile());
 			prop.load(input);
 			input.close();
-			System.out.println("Enter Product Id: ");
-			product.setPid(new Scanner(System.in).nextInt());
-			System.out.println("Enter Product Name: ");
-			product.setPname(new Scanner(System.in).nextLine());
-			System.out.println("Enter Product Category: ");
-			product.setPcat(new Scanner(System.in).nextLine());
-			System.out.println("Enter Product Price: ");
-			product.setPrice(new Scanner(System.in).nextDouble());
-			System.out.println("Enter Product Expiry Date: ");
-			product.setExpiry_date(new Scanner(System.in).nextLine());
-			System.out.println("Enter Manufacture Date");
-			product.setManufacture_date(new Scanner(System.in).nextLine());
 			Class.forName(prop.getProperty("jdbc.driver"));
 			Connection con=DriverManager.getConnection(prop.getProperty("jdbc.url"),prop.getProperty("jdbc.username"),prop.getProperty("jdbc.password"));
 			Statement st=con.createStatement();
@@ -50,9 +39,9 @@ public class ProductDaoImpl implements ProductDao {
 			prepared.setInt(1,product.getPid());
 			prepared.setString(2,product.getPname());
 			prepared.setString(3,product.getPcat());
-			prepared.setString(4,product.getManufacture_date());
+			prepared.setDate(4,(Date) product.getManufacture_date());
 			prepared.setDouble(5, product.getPrice());
-			prepared.setString(6, product.getExpiry_date());
+			prepared.setDate(6, (Date) product.getExpiry_date());
 			prepared.execute();
 			System.out.println("1 row inserted.");
 			
@@ -71,7 +60,7 @@ public class ProductDaoImpl implements ProductDao {
 	@Override
 	public void deleteProductById() {
 		try {
-			FileInputStream input=new FileInputStream("C:/Users/Chuck/git/Batch63_ProductManagementSystem/ProductManagementSystem/src/test.properties");
+			FileInputStream input=new FileInputStream(propertiesfilepath.getFile());
 			prop.load(input);
 			input.close();
 			Class.forName(prop.getProperty("jdbc.driver"));
@@ -99,7 +88,7 @@ public class ProductDaoImpl implements ProductDao {
 	@Override
 	public void deleteProductByCat() {
 		try {
-			FileInputStream input=new FileInputStream("C:/Users/Chuck/git/Batch63_ProductManagementSystem/ProductManagementSystem/src/test.properties");
+			FileInputStream input=new FileInputStream(propertiesfilepath.getFile());
 			prop.load(input);
 			input.close();
 			Class.forName(prop.getProperty("jdbc.driver"));
@@ -129,7 +118,7 @@ public class ProductDaoImpl implements ProductDao {
 	public Product findCheapestProductInCat() {
 		Product fetchedproduct=null;
 		try {
-			FileInputStream input=new FileInputStream("C:/Users/Chuck/git/Batch63_ProductManagementSystem/ProductManagementSystem/src/test.properties");
+			FileInputStream input=new FileInputStream(propertiesfilepath.getFile());
 			prop.load(input);
 			input.close();
 			Class.forName(prop.getProperty("jdbc.driver"));
@@ -141,8 +130,9 @@ public class ProductDaoImpl implements ProductDao {
 			prepared.setString(1, new Scanner(System.in).nextLine());
 			ResultSet results=prepared.executeQuery();
 			while(results.next()) {
-				fetchedproduct=new Product(results.getInt(1),results.getString(2),results.getString(3),results.getString(5)
-				,results.getDouble(4),results.getString(6));
+				//int pid, String pname, String pcat, String manufacture_date, double price, String expiry_date
+				fetchedproduct=new Product(results.getInt(1),results.getString(2),results.getString(3),results.getDate(4)
+				,results.getDouble(5),results.getDate(6));
 			}
 			System.out.println("1 row inserted.");
 		} catch (IOException e) {
@@ -162,7 +152,7 @@ public class ProductDaoImpl implements ProductDao {
 	public List<Product> findProductByCat() {
 		List<Product> list=new ArrayList();
 		try {
-			FileInputStream input=new FileInputStream("C:/Users/Chuck/git/Batch63_ProductManagementSystem/ProductManagementSystem/src/test.properties");
+			FileInputStream input=new FileInputStream(propertiesfilepath.getFile());
 			prop.load(input);
 			input.close();
 			Class.forName(prop.getProperty("jdbc.driver"));
@@ -174,8 +164,8 @@ public class ProductDaoImpl implements ProductDao {
 			prepared.setString(1,new Scanner(System.in).nextLine());
 			ResultSet results=prepared.executeQuery();
 			while(results.next()) {
-				list.add(new Product(results.getInt(1),results.getString(2),results.getString(3),results.getString(5)
-				,results.getDouble(4),results.getString(6)));
+				list.add(new Product(results.getInt(1),results.getString(2),results.getString(3),results.getDate(4)
+						,results.getDouble(5),results.getDate(6)));
 			}
 			System.out.println("1 row inserted.");
 		} catch (IOException e) {
@@ -195,20 +185,20 @@ public class ProductDaoImpl implements ProductDao {
 	public Product findProductById() {
 		Product fetchedproduct=null;
 		try {
-			FileInputStream input=new FileInputStream("C:/Users/Chuck/git/Batch63_ProductManagementSystem/ProductManagementSystem/src/test.properties");
+			FileInputStream input=new FileInputStream(propertiesfilepath.getFile());
 			prop.load(input);
 			input.close();
 			Class.forName(prop.getProperty("jdbc.driver"));
 			Connection con=DriverManager.getConnection(prop.getProperty("jdbc.url"),prop.getProperty("jdbc.username"),prop.getProperty("jdbc.password"));
 			Statement st=con.createStatement();
 			st.execute("Use batch63");
-			PreparedStatement prepared=con.prepareStatement("select * from products order where pid=?");
+			PreparedStatement prepared=con.prepareStatement("select * from products where pid=?");
 			System.out.println("Enter Id");
 			prepared.setInt(1,new Scanner(System.in).nextInt());
 			ResultSet results=prepared.executeQuery();
 			while(results.next()) {
-				fetchedproduct=new Product(results.getInt(1),results.getString(2),results.getString(3),results.getString(5)
-				,results.getDouble(4),results.getString(6));
+				fetchedproduct=new Product(results.getInt(1),results.getString(2),results.getString(3),results.getDate(4)
+						,results.getDouble(5),results.getDate(6));
 			}
 			System.out.println("1 row inserted.");
 		} catch (IOException e) {
@@ -227,7 +217,7 @@ public class ProductDaoImpl implements ProductDao {
 	@Override
 	public void updateProduct() {
 		try {
-			FileInputStream input=new FileInputStream("C:/Users/Chuck/git/Batch63_ProductManagementSystem/ProductManagementSystem/src/test.properties");
+			FileInputStream input=new FileInputStream(propertiesfilepath.getFile());
 			prop.load(input);
 			input.close();
 			Class.forName(prop.getProperty("jdbc.driver"));
@@ -311,20 +301,23 @@ public class ProductDaoImpl implements ProductDao {
 	public List<Product> findExpiredProducts() {
 		List<Product> list=new ArrayList();
 		try {
-			FileInputStream input=new FileInputStream("C:/Users/Chuck/git/Batch63_ProductManagementSystem/ProductManagementSystem/src/test.properties");
+			FileInputStream input=new FileInputStream(propertiesfilepath.getFile());
 			prop.load(input);
 			input.close();
 			Class.forName(prop.getProperty("jdbc.driver"));
 			Connection con=DriverManager.getConnection(prop.getProperty("jdbc.url"),prop.getProperty("jdbc.username"),prop.getProperty("jdbc.password"));
 			Statement st=con.createStatement();
 			st.execute("Use batch63");
-			PreparedStatement prepared=con.prepareStatement("select * from products where pcat=?");
-			System.out.println("Enter Product Category: ");
-			prepared.setString(1,new Scanner(System.in).nextLine());
+			DateFormat dateformatter=new SimpleDateFormat("YYYY-MM-dd");
+			java.util.Date date = new java.util.Date();
+			Date currentdate=new Date(date.getTime());
+			String currentdatetext=dateformatter.format(currentdate);
+			PreparedStatement prepared=con.prepareStatement("select * from products where expiry_date<=?");
+			prepared.setDate(1,(Date) date);
 			ResultSet results=prepared.executeQuery();
 			while(results.next()) {
-				list.add(new Product(results.getInt(1),results.getString(2),results.getString(3),results.getString(5)
-				,results.getDouble(4),results.getString(6)));
+				list.add(new Product(results.getInt(1),results.getString(2),results.getString(3),results.getDate(4)
+						,results.getDouble(5),results.getDate(6)));
 			}
 			System.out.println("1 row inserted.");
 		} catch (IOException e) {

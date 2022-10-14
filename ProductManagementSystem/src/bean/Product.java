@@ -1,17 +1,19 @@
 package bean;
 
+import java.util.Date;
+
 public class Product {
 	int pid;
 	String pname;
 	String pcat;
-	String manufacture_date;
+	Date manufacture_date;
 	double price;
-	String expiry_date;
+	Date expiry_date;
 	public Product() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Product(int pid, String pname, String pcat, String manufacture_date, double price, String expiry_date) {
+	public Product(int pid, String pname, String pcat, Date manufacture_date, double price, Date expiry_date) {
 		super();
 		this.pid = pid;
 		this.pname = pname;
@@ -38,10 +40,10 @@ public class Product {
 	public void setPcat(String pcat) {
 		this.pcat = pcat;
 	}
-	public String getManufacture_date() {
+	public Date getManufacture_date() {
 		return manufacture_date;
 	}
-	public void setManufacture_date(String manufacture_date) {
+	public void setManufacture_date(Date manufacture_date) {
 		this.manufacture_date = manufacture_date;
 	}
 	public double getPrice() {
@@ -50,10 +52,10 @@ public class Product {
 	public void setPrice(double price) {
 		this.price = price;
 	}
-	public String getExpiry_date() {
+	public Date getExpiry_date() {
 		return expiry_date;
 	}
-	public void setExpiry_date(String expiry_date) {
+	public void setExpiry_date(Date expiry_date) {
 		this.expiry_date = expiry_date;
 	}
 
