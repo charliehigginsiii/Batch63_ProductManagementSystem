@@ -66,11 +66,10 @@ public class ProductClient {
 				service.updateProduct();
 			}else if(option==8) {
 				List<Product> list=service.findExpiredProducts();
-				System.out.println(list);
 				for(int i=0;i<list.size();i++) {
 					System.out.println("[Product Id: "+list.get(i).getPid()+",  Product Name: "+list.get(i).getPname()+",  Product Category: "+
 							list.get(i).getPcat()+",  Product Price: $"+list.get(i).getPrice()+",  Product Manufacture Date: "+
-							list.get(i).getManufacture_date()+",  Product Expiration Date"+list.get(i).getExpiry_date()+"]");
+							list.get(i).getManufacture_date()+",  Product Expiration Date: "+list.get(i).getExpiry_date()+"]");
 				}
 			}else if(option==9) {
 				runprogram=false;
